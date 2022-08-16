@@ -72,6 +72,12 @@ export default class {
     this.document = document
     this.onNavigate = onNavigate
     this.store = store
+    // ajout de l'état actuel de chaque list
+    /* this.StatesOfLists = {
+      firstOpen : false,
+      secondOpen : false,
+      thirdsOpen : false
+    } */
     $('#arrow-icon1').click((e) => this.handleShowTickets(e, bills, 1))
     $('#arrow-icon2').click((e) => this.handleShowTickets(e, bills, 2))
     $('#arrow-icon3').click((e) => this.handleShowTickets(e, bills, 3))
@@ -146,7 +152,9 @@ export default class {
     }
 
     bills.forEach(bill => {
+      // la ligne de code originel ne permet pas de mettre en off et de mettre en on à nouveau une fois que l'on click sur chaque ticket
       $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+      // $(`#open-bill${bill.id}`).off().on().click((e) => this.handleEditTicket(e, bill, bills))
     })
 
     return bills
