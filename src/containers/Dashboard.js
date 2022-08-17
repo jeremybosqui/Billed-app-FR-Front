@@ -153,8 +153,9 @@ export default class {
 
     bills.forEach(bill => {
       // la ligne de code originel ne permet pas de mettre en OFF/ON à nouveau une fois que l'on clique sur chaque ticket
-      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
-      // $(`#open-bill${bill.id}`).off().on().click((e) => this.handleEditTicket(e, bill, bills))
+      // $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+      // ligne de code modifier en ajouter off/on au click afin de generate l'ouverture et la fermeture
+       $(`#open-bill${bill.id}`).off().on().click((e) => this.handleEditTicket(e, bill, bills))
     })
 
     return bills
