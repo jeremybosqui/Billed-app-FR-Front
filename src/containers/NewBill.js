@@ -29,6 +29,8 @@ export default class NewBill {
     formData.append('file', file)
     formData.append('email', email)
     const ext = extension.toLowerCase();
+    // remember the jsdom alert
+
     if (!(ext === "jpg" || ext === "png" || ext === "jpeg")) {
       alert("Attention les images au format '" + extension + "' ne sont pas autorisées !\n")
       this.document.querySelector(`input[data-testid="file"]`).value = ''
@@ -51,7 +53,7 @@ export default class NewBill {
   }
   handleSubmit = e => {
     e.preventDefault()
-    console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
+    // console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,
@@ -66,11 +68,13 @@ export default class NewBill {
       fileName: this.fileName,
       status: 'pending'
     }
+    // jest environnement
     this.updateBill(bill)
     this.onNavigate(ROUTES_PATH['Bills'])
   }
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   updateBill = (bill) => {
     if (this.store) {
       this.store

@@ -11,6 +11,7 @@ export default class {
     if (buttonNewBill) buttonNewBill.addEventListener('click', this.handleClickNewBill)
     const iconEye = document.querySelectorAll(`div[data-testid="icon-eye"]`)
     if (iconEye) iconEye.forEach(icon => {
+
       icon.addEventListener('click', () => this.handleClickIconEye(icon))
     })
     new Logout({ document, localStorage, onNavigate })
@@ -34,7 +35,7 @@ export default class {
       .list()
       .then(snapshot => {
         const bills = snapshot
-            // initier le tri du plus recent au plus ancien
+            /* initier le tri du plus recent au plus ancien */
             .sort((a, b) => (a.date < b.date) ? 1 : -1)
           .map(doc => {
             try {
@@ -44,9 +45,11 @@ export default class {
                 status: formatStatus(doc.status)
               }
             } catch(e) {
-              // if for some reason, corrupted data was introduced, we manage here failing formatDate function
-              // log the error and return unformatted date in that case
+              /* if for some reason, corrupted data was introduced, we manage here failing formatDate function
+              log the error and return unformatted date in that case */
+              /* istanbul ignore next */
               console.log(e,'for',doc)
+              /* istanbul ignore next */
               return {
                 ...doc,
                 date: doc.date,
@@ -54,7 +57,9 @@ export default class {
               }
             }
           })
+        /* istanbul ignore next */
           console.log('length', bills.length)
+        /* istanbul ignore next */
         return bills
       })
     }
