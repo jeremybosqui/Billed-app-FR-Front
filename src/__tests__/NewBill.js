@@ -16,7 +16,7 @@ jest.mock("../app/Store", () => mockStore)
 
 describe("Given I am connected as an employee", () => {
   describe("When I submit a new Bill", () => {
-    // Vérifie que le bill se sauvegarde
+    // vérifier si la sauvegarde à bien lieu au niveau du bill créé
     test("Then must save the bill", async () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
@@ -30,14 +30,14 @@ describe("Given I am connected as an employee", () => {
       const html = NewBillUI()
       document.body.innerHTML = html
 
-      const newBillInit = new NewBill({
+      const initNewBills= new NewBill({
         document, onNavigate, store: null, localStorage: window.localStorage
       })
 
       const formNewBill = screen.getByTestId("form-new-bill")
       expect(formNewBill).toBeTruthy()
 
-      const handleSubmit = jest.fn((e) => newBillInit.handleSubmit(e));
+      const handleSubmit = jest.fn((e) => initNewBills.handleSubmit(e));
       formNewBill.addEventListener("submit", handleSubmit);
       fireEvent.submit(formNewBill);
       expect(handleSubmit).toHaveBeenCalled();
@@ -52,7 +52,7 @@ describe("Given I am connected as an employee", () => {
       window.onNavigate(ROUTES_PATH.NewBill)
     })
 
-    // Vérifie si un fichier est bien chargé
+    // verification du folder voir s'il est bien là
     test("Then verify the file bill", async() => {
       jest.spyOn(mockStore, "bills")
 
@@ -69,12 +69,12 @@ describe("Given I am connected as an employee", () => {
       const html = NewBillUI()
       document.body.innerHTML = html
 
-      const newBillInit = new NewBill({
+      const initNewBills = new NewBill({
         document, onNavigate, store: mockStore, localStorage: window.localStorage
       })
 
       const file = new File(['image'], 'image.png', {type: 'image/png'});
-      const handleChangeFile = jest.fn((e) => newBillInit.handleChangeFile(e));
+      const handleChangeFile = jest.fn((e) => initNewBills.handleChangeFile(e));
       const formNewBill = screen.getByTestId("form-new-bill")
       const billFile = screen.getByTestId('file');
 
@@ -84,12 +84,56 @@ describe("Given I am connected as an employee", () => {
       expect(billFile.files[0].name).toBeDefined()
       expect(handleChangeFile).toBeCalled()
 
-      const handleSubmit = jest.fn((e) => newBillInit.handleSubmit(e));
+      const handleSubmit = jest.fn((e) => initNewBills.handleSubmit(e));
       formNewBill.addEventListener("submit", handleSubmit);
       fireEvent.submit(formNewBill);
       expect(handleSubmit).toHaveBeenCalled();
     })
   })
-
+  // build integrity
+  describe("When an error occurs on API", () => {
+    beforeEach(() => {
+      jest.spyOn(mockStore, "bills")
+      Object.defineProperty(
+          window,
+          "localStorage",
+          { value: localStorageMock }
+      )
+      window.localStorage.setItem("user", JSON.stringify({
+        type: "Employee",
+        email: "a@a"
+      }))
+      const root = document.createElement("div")
+      root.setAttribute("id", "root")
+      document.body.appendChild(root)
+      router()
+    })
+    // test pour l'erreur 404 ( page not found )
+    test("Then fetches bills from an API and fails with 404 message error", async () => {
+      mockStore.bills.mockImplementationOnce(() => {
+        return {
+          list : () =>  {
+            return Promise.reject(new Error("Erreur 404"))
+          }
+        }})
+      const html = BillsUI({ error: "Erreur 404" })
+      document.body.innerHTML = html
+      const Errormessage = await screen.getByText(/Erreur 404/)
+      expect(Errormessage).toBeTruthy()
+    })
+    // test pour l'erreur 500 (  indique un problème qui affecte le serveur sur lequel le site est hébergé )
+    test("Then fetches messages from an API and fails with 500 message error", async () => {
+      mockStore.bills.mockImplementationOnce(() => {
+        return {
+          list : () =>  {
+            return Promise.reject(new Error("Erreur 500"))
+          }
+        }})
+      const html = BillsUI({ error: "Erreur 500" })
+      document.body.innerHTML = html
+      const messageError = await screen.getByText(/Erreur 500/)
+      expect(messageError).toBeTruthy()
+    })
+  })
 })
 
