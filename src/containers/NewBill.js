@@ -30,9 +30,9 @@ export default class NewBill {
     formData.append('email', email)
     const ext = extension.toLowerCase();
     // remember the jsdom alert
-    window.alert = () => {};  // rajout d'une alerte vide afin d'enlever l'erreur dans la console concernant le soucis de window alert du à un default jest
+    // window.alert = () => {};  // rajout d'une alerte vide afin d'enlever l'erreur dans la console concernant le soucis de window alert du à un default jest
     if (!(ext === "jpg" || ext === "png" || ext === "jpeg")) {
-      window.alert("Attention les images au format '" + extension + "' ne sont pas autorisées !\n")
+      alert("Attention les images au format '" + extension + "' ne sont pas autorisées !\n")
       this.document.querySelector(`input[data-testid="file"]`).value = ''
     } else {
       this.store
