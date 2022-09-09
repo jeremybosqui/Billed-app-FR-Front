@@ -1,7 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-
+// mise en place des imports
+// Test d'intégration signifie vérifier si différents modules fonctionnent correctement lorsqu'ils sont combinés en tant que groupe.
+// Test unitaire signifie tester des modules individuels d'une application de manière isolée (sans aucune interaction avec les dépendances) pour confirmer que le code fait les choses correctement.
 import {fireEvent, screen, waitFor} from "@testing-library/dom"
 import userEvent from '@testing-library/user-event'
 import DashboardFormUI from "../views/DashboardFormUI.js"

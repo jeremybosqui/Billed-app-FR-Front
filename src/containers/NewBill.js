@@ -1,3 +1,4 @@
+// mise en place des imports
 import { ROUTES_PATH } from '../constants/routes.js'
 import Logout from "./Logout.js"
 

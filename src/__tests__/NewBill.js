@@ -1,7 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-
+// mise en place des imports
+// Test d'intégration signifie vérifier si différents modules fonctionnent correctement lorsqu'ils sont combinés en tant que groupe.
+// Test unitaire signifie tester des modules individuels d'une application de manière isolée (sans aucune interaction avec les dépendances) pour confirmer que le code fait les choses correctement.
 import { fireEvent, screen } from "@testing-library/dom";
 import NewBillUI from "../views/NewBillUI.js";
 import NewBill from "../containers/NewBill.js";
@@ -65,14 +67,14 @@ describe("Given I am connected as an employee", () => {
       window.localStorage.setItem("user", JSON.stringify({
         type: "Employee"
       }))
-
+      // const initier le nouveau bill et le rendre html
       const html = NewBillUI()
       document.body.innerHTML = html
 
       const initNewBills = new NewBill({
         document, onNavigate, store: mockStore, localStorage: window.localStorage
       })
-
+      // const qui rend le type new file egal à celui de png pour n'avoir que ce format là de disponible et de visible grace au if egalitarian créer sur la page newbill dans containers
       const file = new File(['image'], 'image.png', {type: 'image/png'});
       const handleChangeFile = jest.fn((e) => initNewBills.handleChangeFile(e));
       const formNewBill = screen.getByTestId("form-new-bill")
@@ -91,6 +93,7 @@ describe("Given I am connected as an employee", () => {
     })
   })
   // build integrity
+  // ceci nous permet d'initier les tests d'erreur page not found si il y a un soucis avec l'appel de l'API
   describe("When an error occurs on API", () => {
     beforeEach(() => {
       jest.spyOn(mockStore, "bills")

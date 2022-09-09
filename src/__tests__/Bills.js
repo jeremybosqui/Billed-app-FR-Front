@@ -1,7 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-
+// mise en place des imports
+// Test d'intégration signifie vérifier si différents modules fonctionnent correctement lorsqu'ils sont combinés en tant que groupe.
+// Test unitaire signifie tester des modules individuels d'une application de manière isolée (sans aucune interaction avec les dépendances) pour confirmer que le code fait les choses correctement.
 import {screen, waitFor} from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
@@ -76,6 +78,7 @@ describe("Given I am connected as an employee", () => {
       new Bills({
         document, onNavigate, store: null, localStorage: window.localStorage
       })
+      // on check si le screen affiche bien la page "mes notes de frais" et du coup on expect que la page soit bien là grace à tobetruthy qui est en gros un boolean qui va dire soit vrai soit false
       document.body.innerHTML = BillsUI({ data: bills })
       await waitFor(() => screen.getByText("Mes notes de frais"))
       expect(screen.getByText("Mes notes de frais")).toBeTruthy()
@@ -91,11 +94,12 @@ describe("Given I am connected as an employee", () => {
       window.localStorage.setItem("user", JSON.stringify({
         type: "Employee"
       }))
+      // const billesInit qui initie un bill basique = new Bills qui va créer un nouveau bills à partir de la fonction déjà utilisé précédemment
       const billsInit = new Bills({
         document, onNavigate, store: null, localStorage: window.localStorage
       })
       document.body.innerHTML = BillsUI({ data: bills })
-
+      // creation des const qui permettent au click sur l'icon-eye d'afficher la modal grace à classlist.add
       const handleClickIconEye = jest.fn((icon) => billsInit.handleClickIconEye(icon));
       const iconEye = screen.getAllByTestId("icon-eye");
       const modaleFile = document.getElementById("modaleFile")
