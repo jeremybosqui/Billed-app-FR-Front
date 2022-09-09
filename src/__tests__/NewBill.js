@@ -74,7 +74,7 @@ describe("Given I am connected as an employee", () => {
       const initNewBills = new NewBill({
         document, onNavigate, store: mockStore, localStorage: window.localStorage
       })
-      // const qui rend le type new file egal à celui de png pour n'avoir que ce format là de disponible et de visible grace au if egalitarian créer sur la page newbill dans containers
+      // const qui rend le type new file égal à celui de png pour n'avoir que ce format là de disponible et de visible grace au if egalitarian créer sur la page newbill dans containers
       const file = new File(['image'], 'image.png', {type: 'image/png'});
       const handleChangeFile = jest.fn((e) => initNewBills.handleChangeFile(e));
       const formNewBill = screen.getByTestId("form-new-bill")
